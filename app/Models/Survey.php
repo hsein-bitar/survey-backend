@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Survey extends Model
 {
     use HasFactory;
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function responses()
+    {
+        return $this->hasMany(Response::class);
+    }
 }
