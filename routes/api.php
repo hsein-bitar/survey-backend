@@ -22,7 +22,6 @@ use App\Http\Controllers\ResponseController;
 // });
 
 
-
 Route::group(['prefix' => 'v1'], function () {
 
     // AuthController routes
@@ -36,15 +35,17 @@ Route::group(['prefix' => 'v1'], function () {
 
     // SurveyController
     Route::group(['prefix' => 'survey'], function ($router) {
-        Route::group(['middleware' => 'role.admin'], function () {
+        Route::group(['middleware' => 'role.user'], function () {
             Route::post('create', [SurveyController::class, 'create'])->name("create-survey");
         });
+        Route::get('show/{id}', [SurveyController::class, 'show'])->name("show-survey");
+        Route::post('respond', [SurveyController::class, 'respond'])->name("respond");
+        Route::post('results', [SurveyController::class, 'results'])->name("results");
     });
 
     // ResponseController
     Route::group(['prefix' => 'survey'], function ($router) {
         Route::group(['middleware' => 'role.user'], function () {
-            Route::post('respond', [SurveyController::class, 'respond'])->name("respond");
         });
     });
 });

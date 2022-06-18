@@ -8,8 +8,11 @@ use App\Models\User;
 
 use Illuminate\Http\Request;
 
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+
 class AuthController extends Controller
 {
+
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -39,6 +42,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'user_type' => 0,
             'password' => Hash::make($request->password),
         ]);
 
