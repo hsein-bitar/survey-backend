@@ -17,12 +17,14 @@ class AuthUser
      */
     public function handle(Request $request, Closure $next)
     {
+        //TODO activate this middleware and review routes
+        return $next($request);
         // validate & check user_type
-        $user = Auth::user();
-        if ($user) {
-            return $next($request);
-        }
+        // $user = Auth::user();
+        // if ($user) {
+        //     return $next($request);
+        // }
         // TODO make sure it works
-        return redirect('/login');
+        // return redirect('/login');
     }
 }

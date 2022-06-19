@@ -6,8 +6,10 @@ use App\Models\Answer;
 use App\Models\Option;
 use App\Models\Question;
 use App\Models\Response;
-use Illuminate\Http\Request;
 use App\Models\Survey;
+use App\Models\User;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -20,6 +22,14 @@ class SurveyController extends Controller
 
     public function create(Request $request)
     {
+        $request->json($request->all());
+        if (!$request->title) {
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Every survey must include a title',
+            ]);
+        }
+
         $survey = Survey::create([
             'title' => $request->title,
             'user_id' => Auth::user()->id,
@@ -42,7 +52,7 @@ class SurveyController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully created survey',
-            // 'survey' => $survey,
+            'survey_id' => $survey->id,
             // TODO
             // return url of survey to be shared
         ]);
@@ -63,8 +73,24 @@ class SurveyController extends Controller
     }
 
     // TODO finish this
+    public function list(Request $request)
+    {
+        // $user = Auth::user();
+        $user = auth()->user();
+        $surveys = auth()->user()->surveys()->get();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Successfully retreived all your surveys',
+            'survey' => $surveys
+
+        ]);
+    }
     public function respond(Request $request)
     {
+        $request->json($request->all());
+        // return $request;
+        // return response()->json($request->all());
+
         $response = Response::create([
             'user_id' => Auth::user()->id,
             'survey_id' => $request->survey_id,
@@ -79,10 +105,6 @@ class SurveyController extends Controller
             ]);
             foreach ($answer['options'] as $option) {
                 DB::insert('insert into answers_options (answer_id, option_id) values (?, ?)', [$a->id,  $option]);
-                // Option::create([
-                //     'question_id' => $q->id,
-                //     'value' => $option,
-                // ]);
             }
         }
         // TODO
@@ -93,7 +115,6 @@ class SurveyController extends Controller
 
         ]);
     }
-
     // TODO test this
     public function results(Request $request)
     {

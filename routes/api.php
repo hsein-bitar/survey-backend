@@ -40,6 +40,7 @@ Route::group(['prefix' => 'v1'], function () {
         });
         Route::get('show/{id}', [SurveyController::class, 'show'])->name("show-survey");
         Route::post('respond', [SurveyController::class, 'respond'])->name("respond");
+        Route::get('list', [SurveyController::class, 'list'])->name("list");
         Route::post('results', [SurveyController::class, 'results'])->name("results");
     });
 
