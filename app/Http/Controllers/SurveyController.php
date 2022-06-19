@@ -51,7 +51,7 @@ class SurveyController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Successfully created survey',
+            'message' => 'Successfully created survey id: ' . $survey->id,
             'survey_id' => $survey->id,
             // TODO
             // return url of survey to be shared
@@ -76,7 +76,7 @@ class SurveyController extends Controller
     public function list(Request $request)
     {
         $user = auth()->user();
-        $surveys = auth()->user()->surveys()->get();
+        $surveys = auth()->user()->surveys()->withCount('responses')->get();
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully retreived all your surveys',
@@ -87,9 +87,6 @@ class SurveyController extends Controller
     public function respond(Request $request)
     {
         $request->json($request->all());
-        // return $request;
-        // return response()->json($request->all());
-
         $response = Response::create([
             'user_id' => Auth::user()->id,
             'survey_id' => $request->survey_id,
@@ -118,7 +115,7 @@ class SurveyController extends Controller
         $user_id =  Auth::user()->id;
         // $request->json($request->all());
         $survey = Survey::where('id', $request->id)->get();
-        $questions = Question::where('survey_id', $request->id)->with('answers')->get();
+        $questions = Question::where('survey_id', $request->id)->with('answers', 'answers.options')->get();
 
         if ($survey[0]->user_id == $user_id) {
             return response()->json([
