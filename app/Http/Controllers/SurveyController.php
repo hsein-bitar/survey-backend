@@ -75,13 +75,12 @@ class SurveyController extends Controller
     // TODO finish this
     public function list(Request $request)
     {
-        // $user = Auth::user();
         $user = auth()->user();
         $surveys = auth()->user()->surveys()->get();
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully retreived all your surveys',
-            'survey' => $surveys
+            'surveys' => $surveys
 
         ]);
     }
@@ -110,24 +109,23 @@ class SurveyController extends Controller
         // TODO
         return response()->json([
             'status' => 'success',
-            'message' => 'Successfully submitted response',
-            // 'survey' => $survey,
-
+            'message' => 'Successfully submitted response'
         ]);
     }
     // TODO test this
     public function results(Request $request)
     {
+        $user_id =  Auth::user()->id;
+        // $request->json($request->all());
+        $survey = Survey::where('id', $request->id)->get();
+        $questions = Question::where('survey_id', $request->id)->with('answers')->get();
 
-        $survey = Survey::where('id', $request->id)->with('questions', 'questions.options', 'responses', 'responses.answers', 'responses.answers.options')->get();
-
-        if ($survey[0]->user_id == Auth::user()->id) {
+        if ($survey[0]->user_id == $user_id) {
             return response()->json([
                 'status' => 'success',
                 'message' => 'Successfully retrieved survey with all responses',
                 'survey' => $survey,
-                // TODO
-                // return url of survey to be shared
+                'questions' => $questions,
             ]);
         }
         return response()->json([
@@ -135,4 +133,23 @@ class SurveyController extends Controller
             'message' => 'You are not authorized to view this page',
         ]);
     }
+
+    // works but gets the data in a form that is hrd to work with on frontend, switched to the function above
+    // public function results(Request $request)
+    // {   //$request->json($request->all());
+    //     $survey = Survey::where('id', $request->id)->with('questions', 'questions.options', 'responses', 'responses.answers', 'responses.answers.options')->get();
+    //     if ($survey[0]->user_id == Auth::user()->id) {
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'message' => 'Successfully retrieved survey with all responses',
+    //             'survey' => $survey,
+    //             // TODO
+    //             // return url of survey to be shared
+    //         ]);
+    //     }
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => 'You are not authorized to view this page',
+    //     ]);
+    // }
 }
