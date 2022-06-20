@@ -1,13 +1,13 @@
 # surveys
 A website to build surveys, and share them to get answers
-<hr width=33% align=left color=red>
+<hr color=red>
 
 ## Version
 1.0.0
 
 <h2>Usage</h2>
 
-<hr align=left color=red>
+<hr color=red>
 
 ## 1 - Clone this repo, the laravel backend
 ### 1.a For faster setup, copy the .env.example contents into .env
@@ -25,7 +25,7 @@ $ php artisan migrate
 ```sh
 $ php artisan serve
 ```
-<hr width=33% align=left color=red>
+<hr color=red>
 
 ### To test the frontend user interface: you should have NodeJS and NPM intstalled.
 ## 2 - Clone react app repo into your device: https://github.com/hsein-bitar/survey-frontend.git
@@ -39,4 +39,4 @@ $ npm install
 ```sh
 $ npm start
 ```
-<hr width=33% align=left color=red>
+<hr color=red>
