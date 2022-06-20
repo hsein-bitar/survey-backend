@@ -37,14 +37,14 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'survey'], function ($router) {
         Route::group(['middleware' => 'role.user'], function () {
             Route::post('create', [SurveyController::class, 'create'])->name("create-survey");
+            Route::post('respond', [SurveyController::class, 'respond'])->name("respond");
+            Route::get('list', [SurveyController::class, 'list'])->name("list");
+            Route::post('results', [SurveyController::class, 'results'])->name("results");
         });
         Route::get('show/{id}', [SurveyController::class, 'show'])->name("show-survey");
-        Route::post('respond', [SurveyController::class, 'respond'])->name("respond");
-        Route::get('list', [SurveyController::class, 'list'])->name("list");
-        Route::post('results', [SurveyController::class, 'results'])->name("results");
     });
 
-    // ResponseController
+    // ResponseController //ended up not using this
     Route::group(['prefix' => 'survey'], function ($router) {
         Route::group(['middleware' => 'role.user'], function () {
         });

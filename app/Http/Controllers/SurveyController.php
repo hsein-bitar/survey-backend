@@ -76,6 +76,7 @@ class SurveyController extends Controller
     public function list(Request $request)
     {
         $user = auth()->user();
+
         $surveys = auth()->user()->surveys()->withCount('responses')->get();
         return response()->json([
             'status' => 'success',
