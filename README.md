@@ -34,7 +34,7 @@ $ php artisan serve
 ```sh
 $ npm install
 ```
-### 2.b Run Electron
+### 2.b Run
 
 ```sh
 $ npm start
