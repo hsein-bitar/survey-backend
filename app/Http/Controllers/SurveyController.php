@@ -15,12 +15,8 @@ use Illuminate\Support\Facades\DB;
 
 class SurveyController extends Controller
 {
-    //this controller handles
-    // creating a survey
-    // showing a survey to be filled
-    // receiving responses
-
     public function create(Request $request)
+    // receives a survey title and a list of question object, saves to a new survey
     {
         $request->json($request->all());
         if (!$request->title) {
@@ -29,12 +25,10 @@ class SurveyController extends Controller
                 'message' => 'Every survey must include a title',
             ]);
         }
-
         $survey = Survey::create([
             'title' => $request->title,
             'user_id' => Auth::user()->id,
         ]);
-
         foreach ($request->questions as $question) {
             $q = Question::create([
                 'survey_id' => $survey->id,
@@ -48,13 +42,10 @@ class SurveyController extends Controller
                 ]);
             }
         }
-
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully created survey id: ' . $survey->id,
             'survey_id' => $survey->id,
-            // TODO
-            // return url of survey to be shared
         ]);
     }
 
@@ -67,13 +58,11 @@ class SurveyController extends Controller
             'message' => 'Successfully retrieved survey',
             'survey' => $survey,
             'survey_url' => 'temp_url'
-            // TODO
-            // return url of survey to be shared
         ]);
     }
 
-    // TODO finish this
     public function list(Request $request)
+    // returns a list of surveys created by a user
     {
         $user = auth()->user();
 
@@ -85,7 +74,9 @@ class SurveyController extends Controller
 
         ]);
     }
+
     public function respond(Request $request)
+    // receives and saves users' responses on surveys
     {
         $request->json($request->all());
         $response = Response::create([
@@ -104,14 +95,14 @@ class SurveyController extends Controller
                 DB::insert('insert into answers_options (answer_id, option_id) values (?, ?)', [$a->id,  $option]);
             }
         }
-        // TODO
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully submitted response'
         ]);
     }
-    // TODO test this
+
     public function results(Request $request)
+    // return the survey corresponding to the id, with all its questions and responses
     {
         $user_id =  Auth::user()->id;
         // $request->json($request->all());
